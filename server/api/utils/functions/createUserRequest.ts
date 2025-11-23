@@ -37,8 +37,8 @@ export async function createUserRequest<Result>(
 
 function createRequestHeaders(accessToken: string): HeadersInit {
 	const headers = new Headers({
-		Authorization: `Bearer ${accessToken}`,
-		"Content-Type": "application/json",
+		authorization: `Bearer ${accessToken}`,
+		"content-type": "application/json",
 	});
 
 	return headers;
