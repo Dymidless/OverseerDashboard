@@ -2,7 +2,6 @@
 	const { item } = defineProps<SidebarPluginComponentProps>();
 
 	const route = useRoute();
-	console.log(route.path);
 
 	interface SidebarPluginComponentProps {
 		item: SidebarGroupItem;

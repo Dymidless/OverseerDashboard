@@ -7,12 +7,12 @@ export default defineNuxtConfig({
 		enabled: true,
 	},
 	runtimeConfig: {
-		clientId: process.env.CLIENT_ID,
-		clientSecret: process.env.CLIENT_SECRET,
+		clientId: "", // Populated by NUXT_CLIENT_ID
+		clientSecret: "", // Populated by NUXT_CLIENT_SECRET
+		secret: "your-secret-key-change-in-production", // Populated by NUXT_AUTH_SECRET
 		public: {
-			baseURL: process.env.NUXT_PUBLIC_BASE_URL ?? "http://localhost:3000",
+			baseURL: "http://localhost:3000", // Populated by NUXT_PUBLIC_BASE_URL
 		},
-		secret: process.env.AUTH_SECRET,
 	},
 	vite: {
 		plugins: [tailwindcss()],
