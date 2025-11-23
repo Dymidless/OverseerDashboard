@@ -11,14 +11,10 @@
 </script>
 
 <template>
-	<div class="flex justify-center h-full">
-		<div class="flex gap-10 w-full max-w-7xl h-full">
-			<SidebarRoot/>
-			<div class="mt-4 mb-4 w-full">
-				<main class="p-6 h-full rounded-lg border border-neutral-800 bg-neutral-900">
-					<slot/>
-				</main>
-			</div>
-		</div>
+	<div class="flex w-full min-h-screen bg-neutral-950">
+		<SidebarRoot class="border-r border-neutral-800" />
+		<main class="flex-1 min-w-0 overflow-x-hidden">
+			<slot/>
+		</main>
 	</div>
 </template>

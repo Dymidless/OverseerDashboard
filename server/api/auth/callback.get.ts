@@ -1,5 +1,6 @@
 import { exchangeCode } from "../utils/exchangeCode.js";
 import { getUserData } from "../utils/getUserData.js";
+import { encryptData } from "#imports";
 
 export default defineEventHandler(async (event) => {
 	const { code } = getQuery(event);
@@ -22,18 +23,27 @@ export default defineEventHandler(async (event) => {
 			return void sendRedirect(event, "/?error=user_fetch_failed");
 		}
 
-		const sessionData = {
-			user,
+		// Encrypt sensitive tokens
+		const encryptedTokens = encryptData(JSON.stringify({
 			accessToken,
 			refreshToken,
+		}));
+
+		// Session data: user (public) + encrypted tokens
+		const sessionData = {
+			user,
+			tokens: encryptedTokens,
 			expiresAt: Date.now() + expiresIn * 1000,
 		};
 
+		// Cookie with httpOnly for security
+		// Tokens are encrypted, so even if the cookie is intercepted, they cannot be used
 		setCookie(event, "auth_session", JSON.stringify(sessionData), {
-			httpOnly: true,
-			secure: process.env.NODE_ENV === "production",
+			httpOnly: true, // Protection against XSS
+			secure: process.env.NODE_ENV === "production", // Only HTTPS in production
 			maxAge: expiresIn,
-			sameSite: "lax",
+			sameSite: "lax", // Protection against CSRF
+			path: "/",
 		});
 
 		return void sendRedirect(event, "/dashboard");
