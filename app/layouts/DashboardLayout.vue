@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 	definePageMeta({
+		middleware: "auth",
 		validate: (route) => {
 			const { params } = route;
 			const { guildId } = params ?? {};

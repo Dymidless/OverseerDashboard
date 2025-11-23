@@ -9,37 +9,55 @@ export async function exchangeCode(code: string): Promise<{
 } | null> {
 	const init = createInit(code);
 
-	const request = await fetch(`${DISCORD_API_BASE_URL}/oauth2/token`, init);
-	const response = (await request.json()) as DiscordOAuth2TokenResponse;
+	try {
+		const request = await fetch(`${DISCORD_API_BASE_URL}/oauth2/token`, init);
+		const response = (await request.json()) as DiscordOAuth2TokenResponse | DiscordErrorResponse;
 
-	const { ok } = request;
+		const { ok, status } = request;
 
-	if (!ok) return null;
+		if (!ok) {
+			console.error("Discord OAuth2 token exchange failed:", status, response);
+			return null;
+		}
 
-	const { access_token: accessToken, expires_in: expiresIn, refresh_token: refreshToken } = response;
+		if ("error" in response) {
+			console.error("Discord API error:", response.error, response.error_description);
+			return null;
+		}
 
-	return {
-		accessToken,
-		expiresIn,
-		refreshToken,
-	};
+		const { access_token: accessToken, expires_in: expiresIn, refresh_token: refreshToken } = response;
+
+		return {
+			accessToken,
+			expiresIn,
+			refreshToken,
+		};
+	} catch (error) {
+		console.error("Token exchange error:", error);
+		return null;
+	}
 }
 
 function createBody(code: string): BodyInit {
 	const { clientId, clientSecret, public: _public } = useRuntimeConfig();
 	const { baseURL } = _public;
 
+	if (!clientId || !clientSecret) {
+		throw new Error("CLIENT_ID or CLIENT_SECRET environment variables are not set");
+	}
+
 	const callbackURL = createCallbackUrl(baseURL);
 
-	const body = new URLSearchParams({
+	const params = {
 		client_id: clientId,
 		client_secret: clientSecret,
 		code,
 		grant_type: "authorization_code",
 		redirect_uri: callbackURL,
 		scope: "identify guilds",
-	});
+	};
 
+	const body = new URLSearchParams(params);
 	return body;
 }
 
@@ -68,4 +86,9 @@ export interface DiscordOAuth2TokenResponse {
 	refresh_token: string;
 	scope: string;
 	token_type: "Bearer";
+}
+
+export interface DiscordErrorResponse {
+	error: string;
+	error_description?: string;
 }
