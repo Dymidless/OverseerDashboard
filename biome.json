@@ -17,7 +17,7 @@
 		}
 	},
 	"files": {
-		"includes": ["**", "!**/.VSCodeCounter", "!**/.turbo", "!**/.typedoc", "!**/dist"]
+		"includes": ["**", "!**/.nuxt", "!**/.output", "!**/.turbo", "!**/dist"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -46,7 +46,7 @@
 				"useSimplifiedLogicExpression": "error"
 			},
 			"correctness": {
-				"noNodejsModules": "off",
+				"noNodejsModules": "on",
 				"noUndeclaredDependencies": "off",
 				"noUnusedImports": "off",
 				"noUnusedVariables": "off",

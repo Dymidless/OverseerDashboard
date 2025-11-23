@@ -1,25 +1,25 @@
-# Nuxt dev/build outputs
-.output
-.data
-.nuxt
-.nitro
+# Build
 .cache
+.data
+.nitro
+.nuxt
+.output
 dist
+tsconfig.tsbuildinfo
 
-# Node dependencies
-node_modules
-package-lock.json
+# Environment
+.env
+.env.*
+!.env.example
 
 # Logs
 logs
 *.log
 
-# Misc
+# Miscellaneous
 .DS_Store
 .fleet
 .idea
 
-# Local env files
-.env
-.env.*
-!.env.example
+# Packages
+node_modules

@@ -14,6 +14,7 @@ export default defineNuxtConfig({
 		public: {
 			baseURL: "http://localhost:3000", // Populated by NUXT_PUBLIC_BASE_URL
 		},
+		secret: "your-secret-key-change-in-production", // Populated by NUXT_AUTH_SECRET
 	},
 	vite: {
 		plugins: [tailwindcss()],
