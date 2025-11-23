@@ -1,40 +1,25 @@
 import type { DiscordUser } from "~/shared/types/auth";
 
-interface AuthSession {
-	user: DiscordUser;
-	accessToken: string;
-	refreshToken: string;
-	expiresAt: number;
+interface SessionResponse {
+	authenticated: boolean;
+	user: DiscordUser | null;
 }
 
 export function useAuth() {
 	const user = useState<DiscordUser | null>("auth.user", () => null);
 	const loading = useState<boolean>("auth.loading", () => false);
 
-	const parseSessionCookie = (): AuthSession | null => {
-		if (!process.client) return null;
-
-		try {
-			const cookie = useCookie("auth_session");
-			if (cookie.value) {
-				if (typeof cookie.value === "string") {
-					return JSON.parse(cookie.value) as AuthSession;
-				}
-				return cookie.value as AuthSession;
-			}
-		} catch (error) {
-			// Session cookie parsing failed, return null
-		}
-		return null;
-	};
-
 	const fetchSession = async () => {
 		loading.value = true;
 		try {
-			const session = parseSessionCookie();
-			if (session?.user) {
+			const session = await $fetch<SessionResponse>("/api/auth/session");
+			if (session.authenticated && session.user) {
 				user.value = session.user;
+			} else {
+				user.value = null;
 			}
+		} catch (error) {
+			user.value = null;
 		} finally {
 			loading.value = false;
 		}
@@ -51,8 +36,6 @@ export function useAuth() {
 		try {
 			await $fetch("/api/auth/logout", { method: "POST" });
 			user.value = null;
-			const cookie = useCookie("auth_session");
-			cookie.value = null;
 			await navigateTo("/");
 		} finally {
 			loading.value = false;
