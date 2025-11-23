@@ -8,7 +8,7 @@ export function createRedirectUrl(clientId: string) {
 	const encodedCallbackUrl = encodeURIComponent(createCallbackUrl(baseURL));
 	const encodedScopes = encodeURIComponent(scopes.join(" "));
 
-	const redirectUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&amp;response_type=code&amp;redirect_uri=${encodedCallbackUrl}&amp;scope=${encodedScopes}`;
+	const redirectUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodedCallbackUrl}&scope=${encodedScopes}`;
 
-	return redirectUrl as const;
+	return redirectUrl;
 }
