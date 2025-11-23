@@ -1,0 +1,29 @@
+{
+	"dependencies": {
+		"lucide-vue-next": "0.554.0",
+		"nuxt": "4.2.1",
+		"reka-ui": "2.6.0",
+		"tailwind-merge": "3.4.0",
+		"tailwind-variants": "3.1.1",
+		"vue": "3.5.24",
+		"vue-router": "4.6.3"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.3.6",
+		"@tailwindcss/vite": "4.1.17",
+		"rustywind": "0.24.3",
+		"tailwindcss": "4.1.17"
+	},
+	"name": "overseer_dashboard_nuxt",
+	"private": true,
+	"scripts": {
+		"build": "nuxt build",
+		"check": "rustywind --check-formatted .",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"postinstall": "nuxt prepare",
+		"preview": "nuxt preview",
+		"sort": "rustywind --write ."
+	},
+	"type": "module"
+}

@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@theme {
+	--font-geist: "Geist";
+	--font-general-sans: "General Sans";
+	--font-satoshi: "Satoshi";
+}
