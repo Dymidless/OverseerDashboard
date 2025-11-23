@@ -40,6 +40,7 @@
 		"build": "nuxt build",
 		"dev": "nuxt dev",
 		"generate": "nuxt generate",
+		"nuxt:prepare": "nuxt prepare",
 		"postinstall": "nuxt prepare",
 		"prepare": "husky",
 		"preview": "nuxt preview",

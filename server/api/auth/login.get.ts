@@ -1,4 +1,4 @@
-import { createRedirectUrl } from "../utils/createRedirectUrl.js";
+import { createRedirectUrl } from "#imports";
 
 export default defineCachedEventHandler(
 	(event) => {
