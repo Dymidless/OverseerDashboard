@@ -1,6 +1,8 @@
 import { exchangeCode } from "../utils/exchangeCode.js";
 import { getUserData } from "../utils/getUserData.js";
 
+const ONE_SECOND_MILLISECONDS = 1_000;
+
 export default defineEventHandler(async (event) => {
 	const { code } = getQuery(event);
 
@@ -15,30 +17,33 @@ export default defineEventHandler(async (event) => {
 			return void sendRedirect(event, "/?error=exchange_failed");
 		}
 
-		const { accessToken, refreshToken, expiresIn } = exchangeCodeData;
+		const { accessToken, expiresIn, refreshToken } = exchangeCodeData;
 		const user = await getUserData(accessToken);
 
 		if (!user) {
 			return void sendRedirect(event, "/?error=user_fetch_failed");
 		}
 
+		const expiresAt = Date.now() + expiresIn * ONE_SECOND_MILLISECONDS;
 		const sessionData = {
+			access_token: accessToken,
+			expires_at: expiresAt,
+			refresh_token: refreshToken,
 			user,
-			accessToken,
-			refreshToken,
-			expiresAt: Date.now() + expiresIn * 1000,
 		};
+		const stringifiedData = JSON.stringify(sessionData);
 
-		setCookie(event, "auth_session", JSON.stringify(sessionData), {
+		setCookie(event, "auth_session", stringifiedData, {
 			httpOnly: true,
-			secure: process.env.NODE_ENV === "production",
 			maxAge: expiresIn,
 			sameSite: "lax",
+			secure: process.env.NODE_ENV === "production",
 		});
 
 		return void sendRedirect(event, "/dashboard");
 	} catch (error) {
-		console.error("Authentication callback error:", error);
+		console.error("Authentication callback error: ", error);
+
 		return void sendRedirect(event, "/?error=callback_failed");
 	}
 });
