@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"types": ["vue", "node"]
+		"types": ["node", "vue"]
 	},
 	"files": [],
 	"references": [
