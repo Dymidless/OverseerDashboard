@@ -1,15 +1,17 @@
-export async function getUserGuilds(accessToken: string): Promise<DiscordGuild[] | null> {
+import type { RESTGetAPICurrentUserGuildsResult } from "discord-api-types/v10";
+import { createUserRequest } from "./createUserRequest.js";
+
+export async function getUserGuilds(accessToken: string): Promise<RESTGetAPICurrentUserGuildsResult> {
 	try {
-		const response = await fetch(`${DISCORD_API_BASE_URL}/users/@me/guilds`, {
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
+		const { data, isError, isRateLimit } = await createUserRequest<RESTGetAPICurrentUserGuildsResult>(
+			"users/@me/guilds",
+			accessToken,
+		);
 
-		if (!response.ok) return null;
+		if (isError || isRateLimit) return [];
 
-		return (await response.json()) as DiscordGuild[];
+		return data;
 	} catch {
-		return null;
+		return [];
 	}
 }

@@ -1,19 +1,13 @@
-import type { APIUser, RESTGetAPIUserResult } from "discord-api-types/v10";
-
-const DISCORD_API_BASE_URL = "https://discord.com/api/v10";
+import type { RESTGetAPIUserResult } from "discord-api-types/v10";
+import { createUserRequest } from "./createUserRequest.js";
 
 export async function getUserData(accessToken: string): Promise<RESTGetAPIUserResult | null> {
 	try {
-		const response = await fetch(`${DISCORD_API_BASE_URL}/users/@me`, {
-			headers: {
-				authorization: `Bearer ${accessToken}`,
-			},
-		});
-		const { ok } = response;
+		const { data, isError, isRateLimit } = await createUserRequest<RESTGetAPIUserResult>("users/@me", accessToken);
 
-		if (!ok) return null;
+		if (isError || isRateLimit) return null;
 
-		return (await response.json()) as APIUser;
+		return data;
 	} catch {
 		return null;
 	}

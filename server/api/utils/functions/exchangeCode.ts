@@ -1,7 +1,6 @@
 import type { RESTPostOAuth2AccessTokenResult } from "discord-api-types/v10";
+import { DISCORD_API_BASE_URL } from "../constants.js";
 import { createCallbackUrl } from "./createCallbackUrl.js";
-
-const DISCORD_API_BASE_URL = "https://discord.com/api/v10";
 
 export async function exchangeCode(code: string): Promise<RESTPostOAuth2AccessTokenResult | null> {
 	const init = createInit(code);
