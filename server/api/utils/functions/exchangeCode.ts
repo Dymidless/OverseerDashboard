@@ -1,39 +1,39 @@
+import type { RESTPostOAuth2AccessTokenResult } from "discord-api-types/v10";
 import { createCallbackUrl } from "./createCallbackUrl.js";
 
 const DISCORD_API_BASE_URL = "https://discord.com/api/v10";
 
-export async function exchangeCode(code: string): Promise<{
-	accessToken: string;
-	expiresIn: number;
-	refreshToken: string;
-} | null> {
+export async function exchangeCode(code: string): Promise<RESTPostOAuth2AccessTokenResult | null> {
 	const init = createInit(code);
 
 	try {
 		const request = await fetch(`${DISCORD_API_BASE_URL}/oauth2/token`, init);
-		const response = (await request.json()) as DiscordOAuth2TokenResponse | DiscordErrorResponse;
+		const response = (await request.json()) as RESTPostOAuth2AccessTokenResult;
 
 		const { ok, status } = request;
 
 		if (!ok) {
-			console.error("Discord OAuth2 token exchange failed:", status, response);
+			console.error("Discord OAuth2 Token Exchange Failed: ", {
+				response,
+				status,
+			});
+
 			return null;
 		}
 
 		if ("error" in response) {
-			console.error("Discord API error:", response.error, response.error_description);
+			console.error("Discord API Response Error: ", {
+				response,
+				status,
+			});
+
 			return null;
 		}
 
-		const { access_token: accessToken, expires_in: expiresIn, refresh_token: refreshToken } = response;
-
-		return {
-			accessToken,
-			expiresIn,
-			refreshToken,
-		};
+		return response;
 	} catch (error) {
-		console.error("Token exchange error:", error);
+		console.error("Token Exchange Error: ", error);
+
 		return null;
 	}
 }
@@ -42,22 +42,21 @@ function createBody(code: string): BodyInit {
 	const { clientId, clientSecret, public: _public } = useRuntimeConfig();
 	const { baseURL } = _public;
 
-	if (!clientId || !clientSecret) {
-		throw new Error("CLIENT_ID or CLIENT_SECRET environment variables are not set");
+	if (!(clientId && clientSecret)) {
+		throw new Error("Missing CLIENT_ID or CLIENT_SECRET environment variables");
 	}
 
-	const callbackURL = createCallbackUrl(baseURL);
-
+	const callbackUrl = createCallbackUrl(baseURL);
 	const params = {
 		client_id: clientId,
 		client_secret: clientSecret,
 		code,
 		grant_type: "authorization_code",
-		redirect_uri: callbackURL,
+		redirect_uri: callbackUrl,
 		scope: "identify guilds",
 	};
-
 	const body = new URLSearchParams(params);
+
 	return body;
 }
 
@@ -78,17 +77,4 @@ function createInit(code: string): RequestInit {
 		headers,
 		method: "POST",
 	};
-}
-
-export interface DiscordOAuth2TokenResponse {
-	expires_in: number;
-	access_token: string;
-	refresh_token: string;
-	scope: string;
-	token_type: "Bearer";
-}
-
-export interface DiscordErrorResponse {
-	error: string;
-	error_description?: string;
 }
