@@ -45,6 +45,9 @@ importers:
       '@tailwindcss/vite':
         specifier: 4.1.17
         version: 4.1.17(vite@7.2.2(@types/node@24.10.0)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.44.1)(yaml@2.8.1))
+      discord-api-types:
+        specifier: 0.38.34
+        version: 0.38.34
       husky:
         specifier: 9.1.7
         version: 9.1.7
@@ -1900,6 +1903,9 @@ packages:
   diff@8.0.2:
     resolution: {integrity: sha512-sSuxWU5j5SR9QQji/o2qMvqRNYRDOcBTgsJ/DeCf4iSN4gW+gNMXM7wFIP+fdXZxoNiAnHUTGjCr+TSWXdRDKg==}
     engines: {node: '>=0.3.1'}
+
+  discord-api-types@0.38.34:
+    resolution: {integrity: sha512-muq7xKGznj5MSFCzuIm/2TO7DpttuomUTemVM82fRqgnMl70YRzEyY24jlbiV6R9tzOTq6A6UnZ0bsfZeKD38Q==}
 
   dom-serializer@2.0.0:
     resolution: {integrity: sha512-wIkAryiqt/nV5EQKqQpo3SToSOV9J0DnbJqwK7Wv/Trc92zIAYZ4FlMu+JPFW1DfGFt81ZTCGgDEabffXeLyJg==}
@@ -5775,6 +5781,8 @@ snapshots:
   devalue@5.5.0: {}
 
   diff@8.0.2: {}
+
+  discord-api-types@0.38.34: {}
 
   dom-serializer@2.0.0:
     dependencies:

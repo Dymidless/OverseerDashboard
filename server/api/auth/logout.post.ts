@@ -1,4 +1,7 @@
-export default defineEventHandler(async (event) => {
+export default defineEventHandler((event) => {
 	deleteCookie(event, "auth_session");
-	return { success: true };
+
+	return {
+		success: true,
+	};
 });

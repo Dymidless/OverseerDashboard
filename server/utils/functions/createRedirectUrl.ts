@@ -1,5 +1,3 @@
-import { createCallbackUrl } from "./createCallbackUrl.js";
-
 export function createRedirectUrl(clientId: string) {
 	const { public: _public } = useRuntimeConfig();
 	const { baseURL } = _public;
@@ -8,7 +6,8 @@ export function createRedirectUrl(clientId: string) {
 	const encodedCallbackUrl = encodeURIComponent(createCallbackUrl(baseURL));
 	const encodedScopes = encodeURIComponent(scopes.join(" "));
 
-	const redirectUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodedCallbackUrl}&scope=${encodedScopes}`;
+	const redirectUrl =
+		`https://discord.com/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=${encodedCallbackUrl}&scope=${encodedScopes}` as const;
 
 	return redirectUrl;
 }
