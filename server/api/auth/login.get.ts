@@ -1,5 +1,3 @@
-import { createRedirectUrl } from "#imports";
-
 export default defineCachedEventHandler(
 	(event) => {
 		const { clientId } = useRuntimeConfig();

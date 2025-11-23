@@ -1,5 +1,3 @@
-import { DISCORD_API_BASE_URL } from "../constants.js";
-
 export async function createUserRequest<Result>(
 	endpoint: string,
 	accessToken: string,

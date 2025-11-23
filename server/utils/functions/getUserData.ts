@@ -1,5 +1,4 @@
 import type { RESTGetAPIUserResult } from "discord-api-types/v10";
-import { createUserRequest } from "./createUserRequest.js";
 
 export async function getUserData(accessToken: string): Promise<RESTGetAPIUserResult | null> {
 	try {

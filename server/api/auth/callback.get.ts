@@ -1,5 +1,3 @@
-import { exchangeCode, getUserData } from "#imports";
-
 const ONE_SECOND_MILLISECONDS = 1_000;
 
 export default defineEventHandler(async (event) => {
@@ -24,7 +22,7 @@ export default defineEventHandler(async (event) => {
 		}
 
 		const expiresAt = Date.now() + expires_in * ONE_SECOND_MILLISECONDS;
-		const sessionData = {
+		const sessionData: Session = {
 			access_token,
 			expires_at: expiresAt,
 			refresh_token,

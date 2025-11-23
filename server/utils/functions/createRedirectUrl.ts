@@ -1,5 +1,3 @@
-import { createCallbackUrl } from "./createCallbackUrl.js";
-
 export function createRedirectUrl(clientId: string) {
 	const { public: _public } = useRuntimeConfig();
 	const { baseURL } = _public;
