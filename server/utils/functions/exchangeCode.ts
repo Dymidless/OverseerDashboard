@@ -1,9 +1,8 @@
 import type { RESTPostOAuth2AccessTokenResult } from "discord-api-types/v10";
 
 export async function exchangeCode(code: string): Promise<RESTPostOAuth2AccessTokenResult | null> {
-	const init = createInit(code);
-
 	try {
+		const init = createInit(code);
 		const request = await fetch(`${DISCORD_API_BASE_URL}/oauth2/token`, init);
 		const response = (await request.json()) as RESTPostOAuth2AccessTokenResult;
 
@@ -36,17 +35,10 @@ export async function exchangeCode(code: string): Promise<RESTPostOAuth2AccessTo
 }
 
 function createBody(code: string): BodyInit {
-	const { clientId, clientSecret, public: _public } = useRuntimeConfig();
-	const { baseURL } = _public;
-
-	if (!(clientId && clientSecret)) {
-		throw new Error("Missing CLIENT_ID or CLIENT_SECRET environment variables");
-	}
-
-	const callbackUrl = createCallbackUrl(baseURL);
+	const callbackUrl = createCallbackUrl();
 	const params = {
-		client_id: clientId,
-		client_secret: clientSecret,
+		client_id: CLIENT_ID,
+		client_secret: CLIENT_SECRET,
 		code,
 		grant_type: "authorization_code",
 		redirect_uri: callbackUrl,
