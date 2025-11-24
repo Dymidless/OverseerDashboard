@@ -1,3 +1,3 @@
-export function createCallbackUrl(baseUrl: string) {
-	return `${baseUrl}/api/auth/callback` as const;
+export function createCallbackUrl() {
+	return `${BASE_URL}/api/auth/callback` as const;
 }

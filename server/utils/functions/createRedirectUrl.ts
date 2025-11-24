@@ -1,9 +1,6 @@
 export function createRedirectUrl(clientId: string) {
-	const { public: _public } = useRuntimeConfig();
-	const { baseURL } = _public;
-
 	const scopes = ["identify", "guilds"];
-	const encodedCallbackUrl = encodeURIComponent(createCallbackUrl(baseURL));
+	const encodedCallbackUrl = encodeURIComponent(createCallbackUrl());
 	const encodedScopes = encodeURIComponent(scopes.join(" "));
 
 	const redirectUrl =
