@@ -1,28 +1,31 @@
-import { decryptData } from "#imports";
+const UNAUTHORIZED_STATUS_CODE = 401;
 
-export default defineEventHandler(async (event) => {
-    const sessionCookie = getCookie(event, "auth_session");
+export default defineEventHandler((event) => {
+	try {
+		const authorizationCookie = getCookie(event, "authorization");
+		const sessionData = decryptJWT(authorizationCookie ?? "");
 
-    if (!sessionCookie) {
-        return { authenticated: false, user: null };
-    }
+		if (!sessionData) {
+			setResponseStatus(event, UNAUTHORIZED_STATUS_CODE);
 
-    try {
-        const sessionData = JSON.parse(sessionCookie);
+			return {
+				is_authenticated: false,
+			};
+		}
 
-        // Verify expiration
-        if (sessionData.expiresAt && Date.now() > sessionData.expiresAt) {
-            deleteCookie(event, "auth_session");
-            return { authenticated: false, user: null };
-        }
+		// Verify expiration
+		if (sessionData.expiresAt && Date.now() > sessionData.expiresAt) {
+			deleteCookie(event, "auth_session");
+			return { authenticated: false, user: null };
+		}
 
-        // Return only public user information (no tokens)
-        return {
-            authenticated: true,
-            user: sessionData.user,
-        };
-    } catch (error) {
-        console.error("Session verification error:", error);
-        return { authenticated: false, user: null };
-    }
+		// Return only public user information (no tokens)
+		return {
+			authenticated: true,
+			user: sessionData.user,
+		};
+	} catch (error) {
+		console.error("Session verification error:", error);
+		return { authenticated: false, user: null };
+	}
 });
