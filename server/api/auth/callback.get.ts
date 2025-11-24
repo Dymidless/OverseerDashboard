@@ -15,14 +15,21 @@ export default defineEventHandler(async (event) => {
 		}
 
 		const { access_token, expires_in, refresh_token } = exchangeCodeData;
-		const user = await getUserData(access_token);
+		const encryptedAccessToken = encryptData(access_token);
+		const encryptedRefreshToken = encryptData(refresh_token);
 
-		if (!user) {
+		const userData = await getUserData(encryptedAccessToken);
+
+		if (!userData) {
 			return void sendRedirect(event, "/?error=user_fetch_failed");
 		}
 
-		const encryptedAccessToken = encryptData(access_token);
-		const encryptedRefreshToken = encryptData(refresh_token);
+		const { global_name, id, username } = userData;
+		const user: SessionUser = {
+			global_name,
+			id,
+			username,
+		};
 
 		const expiresAt = Date.now() + expires_in * ONE_SECOND_MILLISECONDS;
 		const sessionData: Session = {
