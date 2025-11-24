@@ -1,4 +1,4 @@
-import { type JWTPayload, SignJWT } from "jose";
+import { SignJWT } from "jose";
 
 export async function encryptJWT(session: Session): Promise<string> {
 	const jwtToken = new SignJWT({

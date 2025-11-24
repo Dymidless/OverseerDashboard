@@ -15,6 +15,7 @@ export const ENCRYPTION_ALGORITHM = "aes-256-gcm";
 export const ENCRYPTION_HASH = createHash("sha256");
 export const ENCRYPTION_IV_LENGTH = 12;
 export const ENCRYPTION_KEY = ENCRYPTION_HASH.update(encryptionKey).digest();
+export const ENCRYPTION_TAG_LENGTH = 16;
 
 export const JWT_ENCODER = new TextEncoder();
 export const JWT_SECRET = JWT_ENCODER.encode(jwtSecret);
