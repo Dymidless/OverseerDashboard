@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-	import { twMerge } from "tailwind-merge";
 	import { tv, type VariantProps } from "tailwind-variants";
 
 	const { variant, is } = defineProps<ButtonComponentProps>();
@@ -31,7 +30,7 @@
 </script>
 
 <template>
-	<component :class="twMerge(button({ variant }))" :is="is ?? 'button'">
+	<component :class="button({ variant })" :is="is ?? 'button'">
 		<slot/>
 	</component>
 </template>

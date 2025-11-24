@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-	import { twMerge } from "tailwind-merge";
 	import { tv, type VariantProps } from "tailwind-variants";
 
 	const { orientation } = defineProps<SeparatorComponentProps>();
@@ -25,5 +24,5 @@
 </script>
 
 <template>
-	<div :class="twMerge(separator({ orientation }))"/>
+	<div :class="separator({ orientation })"/>
 </template>
