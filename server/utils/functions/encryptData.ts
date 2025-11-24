@@ -9,7 +9,9 @@ export function encryptData(unencryptedData: string): string {
 	const tag = cipher.getAuthTag();
 
 	const encryptedBuffer = Buffer.concat([encryptedData, final]);
-	const bufferData = Buffer.concat([iv, tag, encryptedBuffer]);
 
-	return bufferData.toString("base64");
+	const bufferData = Buffer.concat([iv, tag, encryptedBuffer]);
+	const bufferDataString = bufferData.toString("base64");
+
+	return bufferDataString;
 }

@@ -1,9 +1,11 @@
 export async function createUserRequest<Result>(
 	endpoint: string,
-	accessToken: string,
+	encryptedAccessToken: string,
 ): Promise<CreateUserRequestResult<Result>> {
 	try {
-		const requestInit = createRequestInit(accessToken);
+		const decryptedAccessToken = decryptData(encryptedAccessToken);
+
+		const requestInit = createRequestInit(decryptedAccessToken);
 		const response = await fetch(`${DISCORD_API_BASE_URL}/${endpoint}`, requestInit);
 
 		const { ok } = response;

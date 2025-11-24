@@ -13,7 +13,9 @@ export function decryptData(encryptedData: string): string {
 
 	const decryptedData = decipher.update(data);
 	const final = decipher.final();
-	const decryptedBuffer = Buffer.concat([decryptedData, final]);
 
-	return decryptedBuffer.toString("utf-8");
+	const decryptedBuffer = Buffer.concat([decryptedData, final]);
+	const decryptedBufferString = decryptedBuffer.toString("utf-8");
+
+	return decryptedBufferString;
 }
