@@ -1,19 +1,16 @@
-import type { DiscordUser } from "~/shared/types/auth";
-
-interface SessionResponse {
-	authenticated: boolean;
-	user: DiscordUser | null;
-}
+import type { AuthSessionResponse } from "~~/server/api/auth/session.get";
 
 export function useAuth() {
-	const user = useState<DiscordUser | null>("auth.user", () => null);
+	const user = useState<SessionUser | null>("auth.user", () => null);
 	const loading = useState<boolean>("auth.loading", () => false);
 
 	const fetchSession = async () => {
 		loading.value = true;
+
 		try {
-			const session = await $fetch<SessionResponse>("/api/auth/session");
-			if (session.authenticated && session.user) {
+			const session = await $fetch<AuthSessionResponse>("/api/auth/session");
+
+			if (session.is_authenticated && session.user) {
 				user.value = session.user;
 			} else {
 				user.value = null;
@@ -25,31 +22,17 @@ export function useAuth() {
 		}
 	};
 
-	const login = () => {
-		if (process.client) {
-			window.location.href = "/api/auth/login";
-		}
-	};
-
-	const logout = async () => {
-		loading.value = true;
-		try {
-			await $fetch("/api/auth/logout", { method: "POST" });
-			user.value = null;
-			await navigateTo("/");
-		} finally {
-			loading.value = false;
-		}
-	};
+	const login = () => navigateTo("/api/auth/login");
+	const logout = async () => navigateTo("/api/auth/logout");
 
 	const isAuthenticated = computed(() => user.value !== null);
 
 	return {
-		user: readonly(user),
-		loading: readonly(loading),
-		isAuthenticated,
 		fetchSession,
+		isAuthenticated,
+		loading: readonly(loading),
 		login,
 		logout,
+		user: readonly(user),
 	};
 }

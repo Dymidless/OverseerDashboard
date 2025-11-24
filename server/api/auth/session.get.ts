@@ -30,13 +30,4 @@ const eventHandler = defineEventHandler(async (event) => {
 
 export default eventHandler;
 
-interface AuthSessionAuthenticatedResponse {
-	is_authenticated: true;
-	user: SessionUser;
-}
-
-interface AuthSessionUnauthenticatedResponse {
-	is_authenticated: false;
-}
-
 export type AuthSessionResponse = Awaited<ReturnType<typeof eventHandler>>;
