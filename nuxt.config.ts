@@ -7,14 +7,14 @@ export default defineNuxtConfig({
 		enabled: true,
 	},
 	runtimeConfig: {
-		clientId: "", // Populated by NUXT_CLIENT_ID
-		clientSecret: "", // Populated by NUXT_CLIENT_SECRET
-		secret: "your-secret-key-change-in-production", // Populated by NUXT_AUTH_SECRET
-		botToken: "", // Populated by NUXT_BOT_TOKEN
+		authSecret: "", // NUXT_AUTH_SECRET
+		clientId: "", // NUXT_CLIENT_ID
+		clientSecret: "", // NUXT_CLIENT_SECRET
+		clientToken: "", // NUXT_CLIENT_TOKEN
+		encryptionKey: "", // NUXT_ENCRYPTION_KEY
 		public: {
-			baseURL: "http://localhost:3000", // Populated by NUXT_PUBLIC_BASE_URL
+			baseURL: "http://localhost:3000", // NUXT_PUBLIC_BASE_URL,
 		},
-		secret: "your-secret-key-change-in-production", // Populated by NUXT_AUTH_SECRET
 	},
 	vite: {
 		plugins: [tailwindcss()],
