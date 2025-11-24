@@ -1,7 +1,3 @@
-import { exchangeCode } from "../utils/exchangeCode.js";
-import { getUserData } from "../utils/getUserData.js";
-import { encryptData } from "#imports";
-
 const ONE_SECOND_MILLISECONDS = 1_000;
 
 export default defineEventHandler(async (event) => {
@@ -25,28 +21,25 @@ export default defineEventHandler(async (event) => {
 			return void sendRedirect(event, "/?error=user_fetch_failed");
 		}
 
-		// Encrypt sensitive tokens
-		const encryptedTokens = encryptData(JSON.stringify({
-			accessToken,
-			refreshToken,
-		}));
+		const encryptedAccessToken = encryptData(access_token);
+		const encryptedRefreshToken = encryptData(refresh_token);
 
-		// Session data: user (public) + encrypted tokens
-		const sessionData = {
+		const expiresAt = Date.now() + expires_in * ONE_SECOND_MILLISECONDS;
+		const sessionData: Session = {
+			access_token: encryptedAccessToken,
+			expires_at: expiresAt,
+			refresh_token: encryptedRefreshToken,
 			user,
-			tokens: encryptedTokens,
-			expiresAt: Date.now() + expiresIn * 1000,
 		};
-		const stringifiedData = JSON.stringify(sessionData);
 
-		// Cookie with httpOnly for security
-		// Tokens are encrypted, so even if the cookie is intercepted, they cannot be used
-		setCookie(event, "auth_session", JSON.stringify(sessionData), {
-			httpOnly: true, // Protection against XSS
-			secure: process.env.NODE_ENV === "production", // Only HTTPS in production
-			maxAge: expiresIn,
-			sameSite: "lax", // Protection against CSRF
+		const jwtToken = await encryptJWT(sessionData);
+
+		setCookie(event, "authorization", jwtToken, {
+			httpOnly: true,
+			maxAge: expires_in,
 			path: "/",
+			sameSite: "lax",
+			secure: process.env.NODE_ENV === "production",
 		});
 
 		return void sendRedirect(event, "/dashboard");

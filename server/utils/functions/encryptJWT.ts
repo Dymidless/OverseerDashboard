@@ -1,7 +1,9 @@
 import { type JWTPayload, SignJWT } from "jose";
 
-export async function encryptJWT(payload: JWTPayload): Promise<string> {
-	const jwtToken = new SignJWT(payload);
+export async function encryptJWT(session: Session): Promise<string> {
+	const jwtToken = new SignJWT({
+		...session,
+	});
 
 	jwtToken.setProtectedHeader({
 		alg: "HS256",
