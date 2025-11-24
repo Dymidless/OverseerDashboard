@@ -17,15 +17,6 @@ export async function exchangeCode(code: string): Promise<RESTPostOAuth2AccessTo
 			return null;
 		}
 
-		if ("error" in response) {
-			console.error("Discord API Response Error: ", {
-				response,
-				status,
-			});
-
-			return null;
-		}
-
 		return response;
 	} catch (error) {
 		console.error("Token Exchange Error: ", error);
