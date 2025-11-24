@@ -1,8 +1,6 @@
 import { createCipheriv, randomBytes } from "node:crypto";
 
 export function encryptData(unencryptedData: string): string {
-	const { encryptionKey } = useRuntimeConfig();
-
 	const iv = randomBytes(ENCRYPTION_IV_LENGTH);
 	const cipher = createCipheriv(ENCRYPTION_ALGORITHM, ENCRYPTION_KEY, iv);
 

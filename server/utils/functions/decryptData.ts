@@ -1,16 +1,11 @@
-import { createDecipheriv, createHash } from "node:crypto";
-
-const IV_LENGTH = 12;
-const TAG_LENGTH = 16;
+import { createDecipheriv } from "node:crypto";
 
 export function decryptData(encryptedData: string): string {
-	const { encryptionKey } = useRuntimeConfig();
-
 	const bufferData = Buffer.from(encryptedData, "base64");
 
-	const iv = bufferData.subarray(0, IV_LENGTH);
-	const tag = bufferData.subarray(IV_LENGTH, IV_LENGTH + TAG_LENGTH);
-	const data = bufferData.subarray(IV_LENGTH + TAG_LENGTH);
+	const iv = bufferData.subarray(0, ENCRYPTION_IV_LENGTH);
+	const tag = bufferData.subarray(ENCRYPTION_IV_LENGTH, ENCRYPTION_IV_LENGTH + ENCRYPTION_TAG_LENGTH);
+	const data = bufferData.subarray(ENCRYPTION_IV_LENGTH + ENCRYPTION_TAG_LENGTH);
 
 	const decipher = createDecipheriv(ENCRYPTION_ALGORITHM, ENCRYPTION_KEY, iv);
 
