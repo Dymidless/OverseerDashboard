@@ -4,14 +4,14 @@ export default defineEventHandler(async (event) => {
 	const { code } = getQuery(event);
 
 	if (typeof code !== "string") {
-		return void sendRedirect(event, "/?error=invalid_code");
+		return sendRedirect(event, "/?error=invalid_code");
 	}
 
 	try {
 		const exchangeCodeData = await exchangeCode(code);
 
 		if (exchangeCodeData === null) {
-			return void sendRedirect(event, "/?error=exchange_failed");
+			return sendRedirect(event, "/?error=exchange_failed");
 		}
 
 		const { access_token, expires_in, refresh_token } = exchangeCodeData;
@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
 		const userData = await getUserData(encryptedAccessToken);
 
 		if (!userData) {
-			return void sendRedirect(event, "/?error=user_fetch_failed");
+			return sendRedirect(event, "/?error=user_fetch_failed");
 		}
 
 		const { global_name, id, username } = userData;
@@ -49,10 +49,10 @@ export default defineEventHandler(async (event) => {
 			secure: process.env.NODE_ENV === "production",
 		});
 
-		return void sendRedirect(event, "/dashboard");
+		return sendRedirect(event, "/dashboard");
 	} catch (error) {
 		console.error("Authentication Callback Error: ", error);
 
-		return void sendRedirect(event, "/?error=callback_failed");
+		return sendRedirect(event, "/?error=callback_failed");
 	}
 });

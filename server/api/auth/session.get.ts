@@ -1,31 +1,42 @@
 const UNAUTHORIZED_STATUS_CODE = 401;
 
-export default defineEventHandler((event) => {
+const eventHandler = defineEventHandler(async (event) => {
 	try {
 		const authorizationCookie = getCookie(event, "authorization");
-		const sessionData = decryptJWT(authorizationCookie ?? "");
+		const sessionData = await decryptJWT(authorizationCookie ?? "");
 
 		if (!sessionData) {
 			setResponseStatus(event, UNAUTHORIZED_STATUS_CODE);
 
 			return {
 				is_authenticated: false,
-			};
+			} as const;
 		}
 
-		// Verify expiration
-		if (sessionData.expiresAt && Date.now() > sessionData.expiresAt) {
-			deleteCookie(event, "auth_session");
-			return { authenticated: false, user: null };
-		}
+		const { user } = sessionData;
 
-		// Return only public user information (no tokens)
 		return {
-			authenticated: true,
-			user: sessionData.user,
-		};
+			is_authenticated: true,
+			user,
+		} as const;
 	} catch (error) {
-		console.error("Session verification error:", error);
-		return { authenticated: false, user: null };
+		console.error("Session Error: ", error);
+
+		return {
+			is_authenticated: false,
+		} as const;
 	}
 });
+
+export default eventHandler;
+
+interface AuthSessionAuthenticatedResponse {
+	is_authenticated: true;
+	user: SessionUser;
+}
+
+interface AuthSessionUnauthenticatedResponse {
+	is_authenticated: false;
+}
+
+export type AuthSessionResponse = Awaited<ReturnType<typeof eventHandler>>;
