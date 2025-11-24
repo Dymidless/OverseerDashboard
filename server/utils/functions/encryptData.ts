@@ -1,11 +1,10 @@
-import { createCipheriv, createHash, randomBytes } from "node:crypto";
+import { createCipheriv, randomBytes } from "node:crypto";
 
 export function encryptData(unencryptedData: string): string {
 	const { encryptionKey } = useRuntimeConfig();
 
 	const iv = randomBytes(ENCRYPTION_IV_LENGTH);
-	const key = createHash("sha256").update(encryptionKey).digest();
-	const cipher = createCipheriv(ENCRYPTION_ALGORITHM, key, iv);
+	const cipher = createCipheriv(ENCRYPTION_ALGORITHM, ENCRYPTION_KEY, iv);
 
 	const encryptedData = cipher.update(unencryptedData, "utf-8");
 	const final = cipher.final();

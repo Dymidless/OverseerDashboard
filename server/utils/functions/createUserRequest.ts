@@ -5,6 +5,7 @@ export async function createUserRequest<Result>(
 	try {
 		const requestInit = createRequestInit(accessToken);
 		const response = await fetch(`${DISCORD_API_BASE_URL}/${endpoint}`, requestInit);
+
 		const { ok } = response;
 
 		if (!ok) {

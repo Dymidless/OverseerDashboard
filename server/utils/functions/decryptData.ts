@@ -12,8 +12,7 @@ export function decryptData(encryptedData: string): string {
 	const tag = bufferData.subarray(IV_LENGTH, IV_LENGTH + TAG_LENGTH);
 	const data = bufferData.subarray(IV_LENGTH + TAG_LENGTH);
 
-	const key = createHash("sha256").update(encryptionKey).digest();
-	const decipher = createDecipheriv(ENCRYPTION_ALGORITHM, key, iv);
+	const decipher = createDecipheriv(ENCRYPTION_ALGORITHM, ENCRYPTION_KEY, iv);
 
 	decipher.setAuthTag(tag);
 
